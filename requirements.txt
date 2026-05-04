@@ -1,0 +1,11 @@
+torch
+torchvision
+numpy
+scikit-learn
+tqdm
+intel-extension-for-pytorch
+Flask
+Werkzeug
+Pillow
+matplotlib
+seaborn

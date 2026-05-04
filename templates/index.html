@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeAI | OCT AI Diagnosis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- SECTION 1: Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo">
+            <svg class="eye-icon" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3" class="pupil"></circle>
+            </svg>
+            <span>EyeAI</span>
+        </div>
+        <div class="nav-links">
+            <a href="#hero">Home</a>
+            <a href="#scanner">Diagnose</a>
+            <a href="#conditions">Conditions</a>
+            <a href="#symptoms">Symptom Checker</a>
+        </div>
+        <a href="#scanner" class="btn-primary">Start Diagnosis</a>
+    </nav>
+
+    <!-- SECTION 2: Hero -->
+    <header class="hero" id="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1>AI Retinal Scan Diagnosis<br><span class="highlight">Instant, Accurate, Free</span></h1>
+            <p>Upload your OCT retinal scan. Our AI detects CNV, DME, Drusen, and Normal in seconds.</p>
+            <div class="hero-buttons">
+                <a href="#scanner" class="btn-primary">Upload Retinal Scan</a>
+            </div>
+            <div class="trust-badges">
+                <span><i class="fa-solid fa-check-circle"></i> 4 Conditions Detected</span>
+                <span><i class="fa-solid fa-microscope"></i> OCT Scan Analysis</span>
+                <span><i class="fa-solid fa-user-md"></i> Not a substitute for a doctor</span>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- SECTION 4: OCT Scan Upload & AI Analyzer -->
+    <section class="scanner-section" id="scanner">
+        <div class="section-header">
+            <h2>AI Diagnostic Scanner</h2>
+            <p>Powered by an advanced deep neural network trained on thousands of OCT images.</p>
+        </div>
+        
+        <div class="scanner-container">
+            <!-- Upload Panel -->
+            <div class="glass-card upload-panel" id="uploadPanel">
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                    <i class="fa-solid fa-cloud-arrow-up icon-large"></i>
+                    <h3>Drop your OCT retinal scan here</h3>
+                    <p>or click to browse files (JPG, PNG)</p>
+                </div>
+                <button class="btn-secondary mt-1" id="sampleBtn" style="width: 100%;">Use a sample scan</button>
+            </div>
+
+            <!-- Analysis Panel -->
+            <div class="glass-card analysis-panel" id="analysisPanel" style="display: none;">
+                <div class="image-preview-container">
+                    <img id="imagePreview" src="" alt="Scan Preview">
+                    <div class="scan-line" id="scanLine"></div>
+                    <div class="arc-loader-container">
+                        <svg class="arc-loader" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(55,138,221,0.2)" stroke-width="4"></circle>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#378ADD" stroke-width="4" stroke-dasharray="100 200" class="spinner"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <div class="analysis-status" id="analysisStatus">
+                    <h3 id="analysisText">Loading scan...</h3>
+                </div>
+            </div>
+
+            <!-- Result Panel -->
+            <div class="glass-card result-panel" id="resultPanel" style="display: none;">
+                <div class="result-header">
+                    <span class="urgency-badge" id="resultBadge">URGENT</span>
+                    <h2 id="resultTitle">Result Title</h2>
+                </div>
+                <div class="confidence-container">
+                    <span>AI Confidence</span>
+                    <div class="confidence-bar"><div id="confidenceFill" class="fill"></div></div>
+                    <span id="confidenceText" class="value">0%</span>
+                </div>
+                <p id="resultDesc" class="result-desc"></p>
+                <div class="action-box" id="resultActionBox">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <p id="resultAction"></p>
+                </div>
+                <div class="result-buttons">
+                    <button class="btn-secondary" id="downloadReportBtn" onclick="window.open('/report', '_blank')">View Detailed Report</button>
+                    <button class="btn-primary" id="resetBtn">Check Another Scan</button>
+                </div>
+                <p class="disclaimer">This result is AI-generated and for educational purposes only. Always consult a qualified ophthalmologist.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Condition Cards -->
+    <section class="conditions-section" id="conditions">
+        <div class="section-header">
+            <h2>Conditions Detected by AI</h2>
+        </div>
+        <div class="cards-grid">
+            <div class="glass-card condition-card" onclick="openModal('CNV')">
+                <div class="card-icon" style="color: #E24B4A;"><i class="fa-solid fa-fire"></i></div>
+                <h3>CNV</h3>
+                <span class="badge badge-red">HIGH RISK</span>
+                <p>Abnormal blood vessel growth beneath the retina.</p>
+            </div>
+            <div class="glass-card condition-card" onclick="openModal('DME')">
+                <div class="card-icon" style="color: #EF9F27;"><i class="fa-solid fa-droplet"></i></div>
+                <h3>DME</h3>
+                <span class="badge badge-red">URGENT</span>
+                <p>Fluid buildup in the macula due to diabetic retinopathy.</p>
+            </div>
+            <div class="glass-card condition-card" onclick="openModal('DRUSEN')">
+                <div class="card-icon" style="color: #FAC775;"><i class="fa-solid fa-cubes-stacked"></i></div>
+                <h3>DRUSEN</h3>
+                <span class="badge badge-amber">MONITOR</span>
+                <p>Yellow deposits under the retina — early sign of AMD.</p>
+            </div>
+            <div class="glass-card condition-card" onclick="openModal('NORMAL')">
+                <div class="card-icon" style="color: #639922;"><i class="fa-solid fa-check-circle"></i></div>
+                <h3>NORMAL</h3>
+                <span class="badge badge-green">ALL CLEAR</span>
+                <p>No abnormality detected in the retinal scan.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: Symptom Checker -->
+    <section class="symptom-section" id="symptoms">
+        <div class="section-header">
+            <h2>Symptom Checker</h2>
+            <p>Select your symptoms to see which condition they may indicate.</p>
+        </div>
+        <div class="glass-card symptom-checker">
+            <div class="symptom-grid" id="symptomGrid">
+                <label class="symptom-checkbox"><input type="checkbox" value="sudden_vision_loss"> Sudden vision loss</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="distorted_vision"> Distorted/wavy central vision</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="blurry_vision"> Blurry central vision</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="colors_faded"> Colors appear faded</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="blind_spot"> Blind spot in center</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="mild_blurring"> Mild blurring</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="floaters"> Floaters</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="light_sensitivity"> Light sensitivity</label>
+                <label class="symptom-checkbox"><input type="checkbox" value="none"> No symptoms</label>
+            </div>
+            <div class="symptom-questions">
+                <label>Are you diabetic? <input type="checkbox" id="sympDiabetic"></label>
+                <label>Age over 50? <input type="checkbox" id="sympAge"></label>
+            </div>
+            <button class="btn-primary mt-2" id="checkSymptomsBtn">Analyze Symptoms</button>
+            <div id="symptomResult" class="symptom-result" style="display:none; margin-top: 1.5rem;"></div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Risk Assessment Quiz -->
+    <section class="risk-section" id="risk">
+        <div class="section-header">
+            <h2>Risk Assessment Quiz</h2>
+        </div>
+        <div class="glass-card risk-quiz">
+            <form id="riskForm">
+                <div class="quiz-question">
+                    <p>Age group:</p>
+                    <select id="qAge"><option value="0">Under 40</option><option value="1">40–60</option><option value="2">Over 60</option></select>
+                </div>
+                <div class="quiz-question">
+                    <p>Do you have diabetes?</p>
+                    <select id="qDiabetic"><option value="1">Yes</option><option value="0">No</option></select>
+                </div>
+                <div class="quiz-question">
+                    <p>Family history of macular degeneration?</p>
+                    <select id="qFamily"><option value="1">Yes</option><option value="0">No</option></select>
+                </div>
+                <div class="quiz-question">
+                    <p>Do you smoke?</p>
+                    <select id="qSmoke"><option value="1">Yes</option><option value="0">No</option></select>
+                </div>
+                <div class="quiz-question">
+                    <p>Screen time per day:</p>
+                    <select id="qScreen"><option value="0">Under 4hrs</option><option value="1">4–8hrs</option><option value="2">Over 8hrs</option></select>
+                </div>
+                <div class="quiz-question">
+                    <p>Last eye exam:</p>
+                    <select id="qExam"><option value="0">Within 1 year</option><option value="1">1–3 years</option><option value="2">Over 3 years / Never</option></select>
+                </div>
+                <button type="button" class="btn-primary mt-2" id="calculateRiskBtn">Calculate Risk</button>
+            </form>
+            <div class="risk-result-container" id="riskResult" style="display:none; text-align:center; margin-top: 2rem;">
+                <div class="circular-score">
+                    <svg viewBox="0 0 36 36"><path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path class="circle" id="riskCircle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg>
+                    <div class="score-text" id="riskScoreVal">0%</div>
+                </div>
+                <div id="riskRecommendation" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Find a Doctor -->
+    <section class="doctor-section" id="doctors">
+        <div class="section-header">
+            <h2>Find a Doctor</h2>
+        </div>
+        <div class="glass-card find-doctor">
+            <div style="display:flex; gap:1rem;">
+                <input type="text" placeholder="Enter your city..." class="city-search" style="flex:1;">
+                <button class="btn-primary">Search</button>
+            </div>
+            <div class="mock-map mt-2" style="height: 200px; background: rgba(0,0,0,0.5); border-radius: 8px; display:flex; align-items:center; justify-content:center; border: 1px solid rgba(255,255,255,0.1);">
+                <p class="text-muted"><i class="fa-solid fa-map-location-dot"></i> Map placeholder</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: Stats Bar -->
+    <section class="stats-bar glass-card">
+        <div class="stat-item"><h2 class="counter" data-target="4">0</h2><p>Conditions Detected</p></div>
+        <div class="stat-item"><h2 class="counter" data-target="94">0</h2><p>% Model Accuracy</p></div>
+        <div class="stat-item"><h2><i class="fa-solid fa-microscope"></i></h2><p>OCT Scan Analysis</p></div>
+        <div class="stat-item"><h2 class="counter" data-target="3">0</h2><p>Seconds to Result</p></div>
+    </section>
+
+    <!-- SECTION 10: Footer -->
+    <footer class="footer">
+        <p><strong>Disclaimer:</strong> EyeAI is not a medical device. This tool uses a trained image classification model for educational demonstration only. Always consult a qualified ophthalmologist.</p>
+        <p>&copy; 2026 EyeAI Diagnostics.</p>
+    </footer>
+
+    <!-- Condition Modal -->
+    <div class="modal" id="conditionModal">
+        <div class="modal-content glass-card">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
