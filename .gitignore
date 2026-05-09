@@ -1,2 +1,7 @@
 archive (6)
 temp
+__pycache__/
+*.pyc
+.env
+*.db
+*.sqlite3
