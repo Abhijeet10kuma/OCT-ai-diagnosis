@@ -68,5 +68,5 @@ The backend uses JWT token-based authentication. Send the token in the `Authoriz
 ## 🛡 Privacy & HIPAA Awareness
 This application is built with privacy in mind. Uploaded images are processed entirely in memory via PyTorch buffers and are **never** stored permanently on disk. They are only retained as base64 strings in MongoDB associated with a secure User ID, ensuring no PII is leaked.
 
-###Author
+## Author
 Abhijeet Kumar
